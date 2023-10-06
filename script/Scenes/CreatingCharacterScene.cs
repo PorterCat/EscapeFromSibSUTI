@@ -14,15 +14,15 @@ internal class CreatingCharacterScene : IScene
 
     public void ShowScene(out SceneType returnScene)
     {
-        List<CharacterCreationPoints> menuPoints = new List<CharacterCreationPoints>
+        List<CharacterCreationPoint> menuPoints = new List<CharacterCreationPoint>
         {
-            CharacterCreationPoints.Play,
-            CharacterCreationPoints.Name,
-            CharacterCreationPoints.Fraction,
-            CharacterCreationPoints.Gender,
-            CharacterCreationPoints.Сharacteristic,
-            CharacterCreationPoints.Description,
-            CharacterCreationPoints.BackToMenu,
+            CharacterCreationPoint.Play,
+            CharacterCreationPoint.Name,
+            CharacterCreationPoint.Fraction,
+            CharacterCreationPoint.Gender,
+            CharacterCreationPoint.Сharacteristic,
+            CharacterCreationPoint.Description,
+            CharacterCreationPoint.BackToMenu,
         };
 
         int row = Console.CursorTop;
@@ -84,7 +84,7 @@ internal class CreatingCharacterScene : IScene
         }
     }
 
-    private void DrawMenu(List<CharacterCreationPoints> items, int row, int col, int index)
+    private void DrawMenu(List<CharacterCreationPoint> items, int row, int col, int index)
     {
         Console.SetCursorPosition(col, row++);
         Console.WriteLine("Меню создания персонажа:");
@@ -123,10 +123,10 @@ internal class CreatingCharacterScene : IScene
             string output;
             switch (items[i])
             {
-                case CharacterCreationPoints.Play:
+                case CharacterCreationPoint.Play:
                     output = "Играть!";
                     break;
-                case CharacterCreationPoints.Name:
+                case CharacterCreationPoint.Name:
                     if (_character.Name != null)
                     {
                         output = "Изменить имя";
@@ -136,13 +136,13 @@ internal class CreatingCharacterScene : IScene
                         output = "Ввести имя";
                     }
                     break;
-                case CharacterCreationPoints.Gender:
+                case CharacterCreationPoint.Gender:
                     output = "Выбрать гендер";
                     break;
-                case CharacterCreationPoints.Description:
+                case CharacterCreationPoint.Description:
                     output = "Ввести описание персонажа";
                     break;
-                case CharacterCreationPoints.Fraction:
+                case CharacterCreationPoint.Fraction:
                     if (_character.Fraction != null)
                     {
                         output = "Изменить фракцию";
@@ -152,10 +152,10 @@ internal class CreatingCharacterScene : IScene
                         output = "Выбрать фракцию";
                     }
                     break;
-                case CharacterCreationPoints.Сharacteristic:
+                case CharacterCreationPoint.Сharacteristic:
                     output = "Задать характеристики";
                     break;
-                case CharacterCreationPoints.BackToMenu:
+                case CharacterCreationPoint.BackToMenu:
                     output = "Назад в главное меню";
                     break;
                 default:

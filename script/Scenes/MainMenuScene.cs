@@ -9,39 +9,32 @@ public class MainMenuScene : IScene
     {
         Console.WriteLine("Главное меню: \n");
 
-        Dictionary<int, string> menuPoints = new Dictionary<int, string>
-        {
-            { 0, "Новая игра" },
-            { 1, "Загрузить персонажа" },
-            { 2, "Информация" },
-            { 3, "Выход" }
-        };
-
-        int index = 0;
-
-        while(true)
+        MenuPoint index = 0;
+        int menuPointsCount = Enum.GetValues<MenuPoint>().Length;
+        while (true)
         {
             Console.SetCursorPosition(0, 1);
-            for (int i = 0; i < menuPoints.Count; i++)
+            for (int i = 0; i < menuPointsCount; i++)
             {
-                if (i == index)
+                if (i == (int)index)
                 {
                     Console.BackgroundColor = Console.ForegroundColor;
                     Console.ForegroundColor = ConsoleColor.Black;
                 }
-                Console.WriteLine(menuPoints[i]);
+                MenuPoint point = (MenuPoint)i;
+                Console.WriteLine(point.GetFriendlyName());
                 Console.ResetColor();
             }
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.DownArrow:
-                    if (index < menuPoints.Count - 1)
+                    if ((int)index < menuPointsCount - 1)
                     {
                         index++;
                     }
                     else
                     {
-                        index = menuPoints.Count - index - 1;
+                        index = menuPointsCount - index - 1;
                     }
                     break;
                 case ConsoleKey.UpArrow:
@@ -51,11 +44,11 @@ public class MainMenuScene : IScene
                     }
                     else
                     {
-                        index = menuPoints.Count - 1;
+                        index = (MenuPoint)menuPointsCount - 1;
                     }
                     break;
                 case ConsoleKey.Enter:
-                    switch (index)
+                    switch ((int)index)
                     {
                         case 0:
                             returnScene = SceneType.Game;
@@ -70,8 +63,6 @@ public class MainMenuScene : IScene
                             returnScene = SceneType.Exit;
                             return;
                         default:
-                            Console.WriteLine($"Выбран пункт {menuPoints[index]}");
-
                             break;
                     }
                     break;
