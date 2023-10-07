@@ -8,6 +8,3 @@ class Program
         game.StartGame();
     }
 }
-
-
-

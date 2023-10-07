@@ -1,90 +1,63 @@
 ﻿using EscapeFromSibSUTI.script.Enums;
+using EscapeFromSibSUTI.script.Modules;
 using EscapeFromSibSUTI.script.Scenes.Interfaces;
 
 namespace EscapeFromSibSUTI.script.Scenes;
 
 internal class CreatingCharacterScene : IScene
 {
-    private Character.Character _character;
+    private Character _character;
 
-    public CreatingCharacterScene(Character.Character character)
+    public CreatingCharacterScene(Character character)
     {
         _character = character;
     }
 
     public void ShowScene(out SceneType returnScene)
     {
-        List<CharacterCreationPoint> menuPoints = new List<CharacterCreationPoint>
-        {
-            CharacterCreationPoint.Play,
-            CharacterCreationPoint.Name,
-            CharacterCreationPoint.Fraction,
-            CharacterCreationPoint.Gender,
-            CharacterCreationPoint.Сharacteristic,
-            CharacterCreationPoint.Description,
-            CharacterCreationPoint.BackToMenu,
-        };
-
+        returnScene = default;
         int row = Console.CursorTop;
         int col = Console.CursorLeft;
         int index = 0;
 
-        while (true)
+
+        CharacterCreationPoint selectedPoint = default;
+        while(true) 
         {
-            DrawMenu(menuPoints, row, col, index);
-            switch (Console.ReadKey(true).Key)
+            selectedPoint = (CharacterCreationPoint)Render.SelectFromEnum(selectedPoint, () => DrawMenu(row, col, index));
+            switch (selectedPoint)
             {
-                case ConsoleKey.DownArrow:
-                    if (index < menuPoints.Count - 1)
-                    {
-                        index++;
-                    }
+                case CharacterCreationPoint.Name:
+                    ChooseName();
                     break;
-                case ConsoleKey.UpArrow:
-                    if (index > 0)
-                    {
-                        index--;
-                    }
+
+                case CharacterCreationPoint.Fraction:
+                    ChooseFraction(row, col);
                     break;
-                case ConsoleKey.Enter:
-                    switch (index) //Логика переходов
-                    {
-                        case 0:
-                            returnScene = SceneType.Game;
-                            return;
 
-                        case 1:
-                            ChooseName();
-                            break;
-
-                        case 2:
-                            List<Fraction> fractionList = new List<Fraction>()
-                            {
-                                Fraction.IP,
-                                Fraction.IV,
-                                Fraction.IA,
-                            };
-
-                            ChooseFraction(fractionList, row, col);
-                            Console.Clear();
-                            break;
-                        case 3:
-                            ChooseGender();
-                            break;
-
-                        case 6:
-                            returnScene = SceneType.Menu;
-                            return;
-                        default:
-                            Console.WriteLine($"Выбран пункт {menuPoints[index]}");
-                            break;
-                    }
+                case CharacterCreationPoint.Description:
                     break;
+
+                case CharacterCreationPoint.Gender:
+                    ChooseGender();
+                    break;
+
+                case CharacterCreationPoint.Сharacteristic:
+                    break;
+
+                case CharacterCreationPoint.Play:
+                    returnScene = SceneType.Game;
+                    return;
+
+                case CharacterCreationPoint.BackToMenu:
+                    returnScene = SceneType.Menu;
+                    return;
             }
+            Console.Clear();
         }
     }
 
-    private void DrawMenu(List<CharacterCreationPoint> items, int row, int col, int index)
+    private void DrawMenu(int row, int col, int index)
     {
         Console.SetCursorPosition(col, row++);
         Console.WriteLine("Меню создания персонажа:");
@@ -104,67 +77,16 @@ internal class CreatingCharacterScene : IScene
         Console.SetCursorPosition(Console.WindowWidth / 2 + 2, row++);
         if (_character.Fraction != null)
         {
-            Console.WriteLine($"Фракция: {_character.Fraction}");
+            Console.WriteLine($"Фракция: {_character.Fraction.GetFriendlyName()}");
         }
         Console.SetCursorPosition(Console.WindowWidth / 2 + 2, row++);
         if (_character.Gender != null)
         {
-            Console.WriteLine($"Пол: {_character.Gender}");
+            Console.WriteLine($"Пол: {_character.Gender.GetFriendlyName()}");
         }
 
         Console.SetCursorPosition(col, row = 1);
-        for (int i = 0; i < items.Count; i++)
-        {
-            if (i == index)
-            {
-                Console.BackgroundColor = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.Black;
-            }
-            string output;
-            switch (items[i])
-            {
-                case CharacterCreationPoint.Play:
-                    output = "Играть!";
-                    break;
-                case CharacterCreationPoint.Name:
-                    if (_character.Name != null)
-                    {
-                        output = "Изменить имя";
-                    }
-                    else
-                    {
-                        output = "Ввести имя";
-                    }
-                    break;
-                case CharacterCreationPoint.Gender:
-                    output = "Выбрать гендер";
-                    break;
-                case CharacterCreationPoint.Description:
-                    output = "Ввести описание персонажа";
-                    break;
-                case CharacterCreationPoint.Fraction:
-                    if (_character.Fraction != null)
-                    {
-                        output = "Изменить фракцию";
-                    }
-                    else
-                    {
-                        output = "Выбрать фракцию";
-                    }
-                    break;
-                case CharacterCreationPoint.Сharacteristic:
-                    output = "Задать характеристики";
-                    break;
-                case CharacterCreationPoint.BackToMenu:
-                    output = "Назад в главное меню";
-                    break;
-                default:
-                    output = "Чёт багануло";
-                    break;
-            }
-            Console.WriteLine(output);
-            Console.ResetColor();
-        }
+        
         Console.WriteLine();
     }
 
@@ -304,8 +226,14 @@ internal class CreatingCharacterScene : IScene
         }
     }
 
-    private void ChooseFraction(List<Fraction> fractions, int row, int col)
+    private void ChooseFraction(int row, int col)
     {
+        List<Fraction> fractions = new List<Fraction>()
+                                {
+                                    Fraction.IP,
+                                    Fraction.IV,
+                                    Fraction.IA,
+                                };
         Console.Clear();
         Console.WriteLine("Выберите фракцию");
 

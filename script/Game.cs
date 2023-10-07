@@ -8,7 +8,7 @@ public class Game
 {
     private IScene _currentScene;
     private SceneType _currentSceneType = SceneType.Menu;
-    private Character.Character _player = new();
+    private Character _player = new();
 
     public void StartGame()
     {

@@ -4,9 +4,9 @@ namespace EscapeFromSibSUTI.script.Scenes;
 
 internal class GameScene : IScene
 {
-    private Character.Character _character;
+    private Character _character;
 
-    public GameScene(Character.Character character)
+    public GameScene(Character character)
     {
         _character = character;
     }

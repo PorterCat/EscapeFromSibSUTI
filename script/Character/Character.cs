@@ -1,6 +1,6 @@
 ﻿using EscapeFromSibSUTI.script.Enums;
 
-namespace EscapeFromSibSUTI.script.Character;
+namespace EscapeFromSibSUTI.script;
 
 public class Character
 {
