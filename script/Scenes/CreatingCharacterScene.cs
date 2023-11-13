@@ -16,15 +16,12 @@ internal class CreatingCharacterScene : IScene
     public void ShowScene(out SceneType returnScene)
     {
         returnScene = default;
-        int row = Console.CursorTop;
-        int col = Console.CursorLeft;
-        int index = 0;
-
-
         CharacterCreationPoint selectedPoint = default;
-        while(true) 
+        while (true)
         {
-            selectedPoint = (CharacterCreationPoint)Render.SelectFromEnum(selectedPoint, () => DrawMenu(row, col, index));
+            Console.SetCursorPosition(0, 0);
+            Console.WriteLine("Настройка персонажа:");
+            selectedPoint = (CharacterCreationPoint)Render.SelectFromEnum(selectedPoint, () => ShowCharacterList());
             switch (selectedPoint)
             {
                 case CharacterCreationPoint.Name:
@@ -32,10 +29,11 @@ internal class CreatingCharacterScene : IScene
                     break;
 
                 case CharacterCreationPoint.Fraction:
-                    ChooseFraction(row, col);
+                    ChooseFraction();
                     break;
 
                 case CharacterCreationPoint.Description:
+                    /*ChooseDescription();*/
                     break;
 
                 case CharacterCreationPoint.Gender:
@@ -43,6 +41,7 @@ internal class CreatingCharacterScene : IScene
                     break;
 
                 case CharacterCreationPoint.Сharacteristic:
+                    /*ChooseCharacteristic(); может тут тоже сделать отдельное окон?*/
                     break;
 
                 case CharacterCreationPoint.Play:
@@ -57,224 +56,87 @@ internal class CreatingCharacterScene : IScene
         }
     }
 
-    private void DrawMenu(int row, int col, int index)
+    private void ShowCharacterList()
     {
-        Console.SetCursorPosition(col, row++);
-        Console.WriteLine("Меню создания персонажа:");
-        Console.SetCursorPosition(Console.WindowWidth / 2 + 2, 0);
-        Console.WriteLine("Персонаж:");
-        for (int i = 0; i < 25; i++)
+        int row = 0, col = 40;
+
+        Console.SetCursorPosition(col + 3, row);
+        Console.Write("Лист персонажа:");
+        row += 2;
+        for (int i = 0; i < 8; i++)
         {
-            Console.SetCursorPosition(Console.WindowWidth / 2, i);
-            Console.Write('╫');
+            Console.SetCursorPosition(col, row++);
+            Console.Write("||");
         }
 
-        Console.SetCursorPosition(Console.WindowWidth / 2 + 2, row++);
+        Console.SetCursorPosition(col += 3, row = 2);
         if (_character.Name != null)
         {
-            Console.WriteLine($"Имя: {_character.Name}");
+            Console.Write($"Имя персонажа: {_character.Name}");
         }
-        Console.SetCursorPosition(Console.WindowWidth / 2 + 2, row++);
-        if (_character.Fraction != null)
-        {
-            Console.WriteLine($"Фракция: {_character.Fraction.GetFriendlyName()}");
-        }
-        Console.SetCursorPosition(Console.WindowWidth / 2 + 2, row++);
+        Console.SetCursorPosition(col, ++row);
         if (_character.Gender != null)
         {
-            Console.WriteLine($"Пол: {_character.Gender.GetFriendlyName()}");
+            Console.Write($"Пол: {_character.Gender.GetFriendlyName()}");
         }
-
-        Console.SetCursorPosition(col, row = 1);
-        
-        Console.WriteLine();
+        Console.SetCursorPosition(col, ++row);
+        if(_character.Fraction != null)
+        {
+            Console.Write($"Фракция: {_character.Fraction.GetFriendlyName()}");
+        }
     }
 
-    private void DrawFraction(List<Fraction> items, int row, int col, int index)
+    private void ShowFractionDescription(Fraction fraction)
     {
-        Console.Clear();
+        int row = 7, col = 0;
         Console.SetCursorPosition(col, row);
-        Console.WriteLine("Меню создания персонажа:");
-
-        Console.SetCursorPosition(25, row);
-        switch (items[index])
+        int padRight = 20;
+        switch (fraction)
         {
             case Fraction.IP:
-                Console.Write("Добро пожаловать в удивительный мир фракции \"групп ИП\" университета \"СибГУТИ\"\n");
-                Console.SetCursorPosition(25, ++row);
-                Console.Write("Эта самая многочисленная группа информатиков, занимающиеся программированием, — настоящие герои цифровой эпохи! \n");
-                Console.Write("\n");
-                break;
+                Console.WriteLine("Ну тупа психи".PadRight(padRight)); break;
             case Fraction.IV:
-                Console.Write("Добро пожаловать в удивительный мир фракции \"групп ИВ\" университета \"СибГУТИ\"\n");
-                Console.SetCursorPosition(25, ++row);
-                Console.Write("Если бы у нас была книга заклинаний, они бы владели всеми уровнями Wi-Fi!");
-                Console.SetCursorPosition(25, ++row);
-                Console.Write("Сетевые админы могут создать связь даже в самых отдаленных и магических уголках института.\n");
-                Console.Write("\n");
-                break;
+                Console.WriteLine("Ещё психи".PadRight(padRight)); break;
             case Fraction.IA:
-                Console.Write("Добро пожаловать в удивительный мир фракции \"групп ИА\" университета \"СибГУТИ\"\n");
-                Console.SetCursorPosition(25, ++row);
-                Console.Write("Не бойся, мы всего лишь рефакторим этот MVP в MVVM с использованием Kotlin!\n");
-                Console.Write("\n");
-                break;
-
-        }
-
-        Console.SetCursorPosition(col, 1);
-        for (int i = 0; i < items.Count; i++)
-        {
-            if (i == index)
-            {
-                Console.BackgroundColor = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.Black;
-            }
-            string output;
-            switch (items[i])
-            {
-                case Fraction.IP:
-                    output = "Играть за ИПшников";
-                    break;
-                case Fraction.IV:
-                    output = "Играть за ИВшников";
-                    break;
-                case Fraction.IA:
-                    output = "Играть за ИАшников";
-                    break;
-                default:
-                    output = "Чёт багануло";
-                    break;
-            }
-            Console.WriteLine(output);
-            Console.ResetColor();
-        }
-        Console.WriteLine();
+                Console.WriteLine("Третьи психи".PadRight(padRight)); break;
+        }      
     }
 
     private void ChooseName()
     {
         Console.Clear();
         Console.WriteLine("Введите имя персонажа");
-        string name = Console.ReadLine();
-        _character.Name = name;
-        Console.Clear();
+        ShowCharacterList();
+        Console.SetCursorPosition(0, 1);
+        _character.Name = Console.ReadLine();
     }
 
     private void ChooseGender()
     {
         Console.Clear();
-        Console.WriteLine("Выберите гендер:");
-
-        Dictionary<int, string> menuPoints = new Dictionary<int, string>
-        {
-            { 0, "Студент" },
-            { 1, "Студентка" },
-            { 2, "Выход" }
-        };
-
-        int index = 0;
-
-        while (true)
-        {
-            Console.SetCursorPosition(0, 1);
-            for (int i = 0; i < menuPoints.Count; i++)
-            {
-                if (i == index)
-                {
-                    Console.BackgroundColor = Console.ForegroundColor;
-                    Console.ForegroundColor = ConsoleColor.Black;
-                }
-                Console.WriteLine(menuPoints[i]);
-                Console.ResetColor();
-            }
-            switch (Console.ReadKey(true).Key)
-            {
-                case ConsoleKey.DownArrow:
-                    if (index < menuPoints.Count - 1)
-                    {
-                        index++;
-                    }
-                    break;
-                case ConsoleKey.UpArrow:
-                    if (index > 0)
-                    {
-                        index--;
-                    }
-                    break;
-                case ConsoleKey.Enter:
-                    switch (index)
-                    {
-                        case 0:
-                            _character.Gender = Gender.Male;
-                            return;
-
-                        case 1:
-                            _character.Gender = Gender.Female;
-                            return;
-                        case 2:
-                            return;
-
-                        default:
-                            Console.WriteLine($"Выбран пункт {menuPoints[index]}");
-
-                            break;
-                    }
-                    break;
-            }
-
-        }
+        Console.WriteLine("Выберите пол");
+        Gender selectedPoint = default;
+        selectedPoint = (Gender)Render.SelectFromEnum(selectedPoint, () => ShowCharacterList());
+        _character.Gender = selectedPoint;
     }
 
-    private void ChooseFraction(int row, int col)
+    private void ChooseFraction()
     {
-        List<Fraction> fractions = new List<Fraction>()
-                                {
-                                    Fraction.IP,
-                                    Fraction.IV,
-                                    Fraction.IA,
-                                };
         Console.Clear();
         Console.WriteLine("Выберите фракцию");
+        Fraction selectedPoint = default;
 
-        int index = 0;
+        //подписка
+        Render.IndexChanged += ShowDescription;
+        selectedPoint = (Fraction)Render.SelectFromEnum(selectedPoint, () => ShowCharacterList());
+        //отписка
+        Render.IndexChanged -= ShowDescription;
 
-        while (true)
-        {
-            DrawFraction(fractions, row, col, index);
-            switch (Console.ReadKey(true).Key)
-            {
-                case ConsoleKey.DownArrow:
-                    if (index < fractions.Count - 1)
-                    {
-                        index++;
-                    }
-                    break;
-                case ConsoleKey.UpArrow:
-                    if (index > 0)
-                    {
-                        index--;
-                    }
-                    break;
-                case ConsoleKey.Enter:
-                    switch (index) //Логика переходов
-                    {
-                        case 0:
-                            _character.Fraction = Fraction.IP;
-                            return;
+        ShowFractionDescription(selectedPoint);
+        _character.Fraction = selectedPoint;
 
-                        case 1:
-                            _character.Fraction = Fraction.IV;
-                            return;
-
-                        case 2:
-                            _character.Fraction = Fraction.IA;
-                            return;
-                        case 3:
-                            return;
-                    }
-                    break;
-            }
-        }
+        void ShowDescription() => ShowFractionDescription((Fraction)selectedPoint.SetValue(Render.Index));
     }
+
+
 }

@@ -13,4 +13,5 @@ public class Character
     public int Level { get; private set; }
     public Gender? Gender { get; set; }
     public Fraction? Fraction { get; set; }
+    public Dictionary<Characterstic, int> Characterstic { get; set; }
 }

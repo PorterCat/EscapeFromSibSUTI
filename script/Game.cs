@@ -7,7 +7,7 @@ namespace EscapeFromSibSUTI.script;
 public class Game
 {
     private IScene _currentScene;
-    private SceneType _currentSceneType = SceneType.Menu;
+    private SceneType _currentSceneType = default;
     private Character _player = new();
 
     public void StartGame()

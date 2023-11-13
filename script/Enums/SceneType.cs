@@ -3,8 +3,8 @@
 public enum SceneType
 {
     Menu,
-    CharacterCreation,
     Game,
+    CharacterCreation,
     Info,
     Exit,
 }

@@ -36,7 +36,7 @@ public static class EnumExtensions
 
     private static Dictionary<SceneType, string> _sceneTypes = new()
     {
-        {SceneType.Menu, "Меню" },
+        {SceneType.Menu, "" },
         {SceneType.CharacterCreation, "Создание персонажа" },
         {SceneType.Game, "Играть"},
         {SceneType.Info, "Информация" },

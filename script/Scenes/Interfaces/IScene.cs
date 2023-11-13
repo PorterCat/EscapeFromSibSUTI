@@ -2,5 +2,5 @@
 
 public interface IScene
 {
-    public void ShowScene(out Enums.SceneType scene);
+    public void ShowScene(out Enums.SceneType returnScene);
 }

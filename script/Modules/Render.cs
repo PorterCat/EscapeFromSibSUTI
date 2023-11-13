@@ -4,18 +4,30 @@ namespace EscapeFromSibSUTI.script.Modules;
 
 public static class Render
 {
-    public static Enum SelectFromEnum(Enum someEnum, Action callback = null)
+    public static Action IndexChanged;
+    private static int _index;
+    public static int Index
+    { 
+        get => _index;
+        private set 
+        {
+            _index = value;
+            IndexChanged?.Invoke();
+        }
+    }
+
+    public static Enum SelectFromEnum(Enum someEnum, Action? callback = null)
     {
         var enumValues =  someEnum.ExtractFromEnum();
-        int index = 0;
+        Index = 0;
 
         while (true)
         {
             callback?.Invoke();
-            Console.SetCursorPosition(0, 1);
+            Console.SetCursorPosition(0, 2);
             for (int i = 0; i < enumValues.Length; i++)
             {
-                if (i == index)
+                if (i == Index)
                 {
                     Console.BackgroundColor = Console.ForegroundColor;
                     Console.ForegroundColor = ConsoleColor.Black;
@@ -26,27 +38,27 @@ public static class Render
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.DownArrow:
-                    if (index < enumValues.Length - 1)
+                    if (Index < enumValues.Length - 1)
                     {
-                        index++;
+                        Index++;
                     }
                     else
                     {
-                        index = enumValues.Length - index - 1;
+                        Index = enumValues.Length - Index - 1;
                     }
                     break;
                 case ConsoleKey.UpArrow:
-                    if (index > 0)
+                    if (Index > 0)
                     {
-                        index--;
+                        Index--;
                     }
                     else
                     {
-                        index = enumValues.Length - 1;
+                        Index = enumValues.Length - 1;
                     }
                     break;
                 case ConsoleKey.Enter:
-                    return someEnum.SetValue(index);
+                    return someEnum.SetValue(Index);
             }
         }
     }
